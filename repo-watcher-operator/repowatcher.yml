@@ -1,7 +1,3 @@
-## Repo Watcher Operator
-
-1. Fill in the manifest value for which repo you want to see the latest release from.
-```
 apiVersion: v1
 kind: Secret
 metadata:
@@ -34,15 +30,3 @@ spec:
     - https://github.com/fluxcd/flux2
     - https://github.com/grafana/grafana
     - https://github.com/microsoft/vscode
-```
-
-2. How to run
-```
-cd repo-watcher-operator
-make deploy
-kubectl apply -f repowatcher.yml
-```
-
-3. Notification
-  Current notifaction provider is for Telegram only.
-  ![image watcher](./assets/telegram-notif.png)
