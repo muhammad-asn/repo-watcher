@@ -11,7 +11,6 @@ import (
 
 	"github.com/avast/retry-go/v4"
 	"github.com/google/go-github/v32/github"
-	"github.com/joho/godotenv"
 	"golang.org/x/oauth2"
 )
 
@@ -68,9 +67,6 @@ Last published: %s`, repo, latestRelease.GetName(),
 }
 
 func main() {
-	if err := godotenv.Load(".env"); err != nil {
-		log.Fatal("Error loading .env file")
-	}
 
 	var githubToken string
 	var provider string
@@ -103,7 +99,7 @@ func main() {
 	// Create a new GitHub client
 	client := github.NewClient(tc)
 
-	file, err := os.Open("list-repo-to-watch.txt")
+	file, err := os.Open("repo-to-watch.txt")
 	if err != nil {
 		log.Fatal(err)
 	}

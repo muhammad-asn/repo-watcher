@@ -1,0 +1,57 @@
+---
+- name: create namespace repo-watcher
+  kubernetes.core.k8s:
+    definition:
+      apiVersion: v1
+      kind: Namespace
+      metadata:
+        name: repo-watcher
+
+- name: generate configmap
+  kubernetes.core.k8s:
+    definition:
+      apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: repo-watcher-configmap
+        namespace: repo-watcher
+      data:
+        repo-to-watch.txt: |
+          {% for item in repo_to_watch %}
+          {{ item }}
+          {% endfor %}
+
+- name: start repo-watcher job
+  kubernetes.core.k8s:
+    definition:
+      kind: CronJob
+      apiVersion: batch/v1
+      metadata:
+        name: repo-watcher-job
+        namespace: repo-watcher
+      spec:
+        schedule: "{{ schedule }}"
+        jobTemplate:
+          spec:
+            template:
+              spec:
+                containers:
+                - name: repo-watcher
+                  image: "{{ image }}"
+                  imagePullPolicy: IfNotPresent
+                  volumeMounts:
+                    - name: config-vol
+                      mountPath: /app/repo-to-watch.txt
+                      subPath: repo-to-watch.txt
+                  envFrom:
+                    - secretRef:
+                        name: "{{ secret_ref.name }}"
+                  command:
+                  - /bin/bash
+                  - -c
+                  - ./repo-watcher
+                volumes:
+                  - name: config-vol
+                    configMap: 
+                      name: repo-watcher-configmap
+                restartPolicy: OnFailure

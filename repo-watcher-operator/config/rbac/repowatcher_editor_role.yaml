@@ -1,0 +1,31 @@
+# permissions for end users to edit repowatchers.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/name: clusterrole
+    app.kubernetes.io/instance: repowatcher-editor-role
+    app.kubernetes.io/component: rbac
+    app.kubernetes.io/created-by: repo-watcher-operator
+    app.kubernetes.io/part-of: repo-watcher-operator
+    app.kubernetes.io/managed-by: kustomize
+  name: repowatcher-editor-role
+rules:
+- apiGroups:
+  - repo.muhammad-asn.example.com
+  resources:
+  - repowatchers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - repo.muhammad-asn.example.com
+  resources:
+  - repowatchers/status
+  verbs:
+  - get

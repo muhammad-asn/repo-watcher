@@ -1,0 +1,27 @@
+# permissions for end users to view repowatchers.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/name: clusterrole
+    app.kubernetes.io/instance: repowatcher-viewer-role
+    app.kubernetes.io/component: rbac
+    app.kubernetes.io/created-by: repo-watcher-operator
+    app.kubernetes.io/part-of: repo-watcher-operator
+    app.kubernetes.io/managed-by: kustomize
+  name: repowatcher-viewer-role
+rules:
+- apiGroups:
+  - repo.muhammad-asn.example.com
+  resources:
+  - repowatchers
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - repo.muhammad-asn.example.com
+  resources:
+  - repowatchers/status
+  verbs:
+  - get
